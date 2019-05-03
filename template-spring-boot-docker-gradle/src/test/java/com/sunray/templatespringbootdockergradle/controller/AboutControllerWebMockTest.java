@@ -6,7 +6,9 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -15,7 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(AboutController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class AboutControllerWebMockTest {
 	
 	@Autowired
@@ -24,7 +27,7 @@ public class AboutControllerWebMockTest {
 	@Test
 	public void testAboutMessage() throws Exception {
 		this.mockMvc.perform(get("/about")).andDo(print()).andExpect(status().isOk())
-			.andExpect(content().string(containsString("Version1")));
+			.andExpect(content().string(containsString("Version 1.0")));
 	}
 
 }
