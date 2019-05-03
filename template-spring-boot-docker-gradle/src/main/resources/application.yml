@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active: "compose"
+---
+spring:
+  profiles: compose
+redis:
+  hostname: redis
+#  hostname: localhost
+#server:
+#  port: 8080
+app:
+  message:
+    about: "Running in compose mode"
+---
+spring:
+  profiles: host
+redis:
+  hostname: localhost
+#server:
+#  port: 8080
+app:
+  message:
+    about: "Running in host mode"
