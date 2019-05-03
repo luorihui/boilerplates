@@ -12,7 +12,7 @@ public class AboutController {
 	@Value("${app.message.about}")
 	private String messageAbout;
 	public static final Logger logger = LoggerFactory.getLogger(AboutController.class.getName());
-	  @GetMapping(value = "/api/about")
+	  @GetMapping(value = "/about")
 	  @CrossOrigin(origins = "*") 
 	  public String about() {
 		  final String aboutMessage =  "Version 1.0 " + messageAbout;
