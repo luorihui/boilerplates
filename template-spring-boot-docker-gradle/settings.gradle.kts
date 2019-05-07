@@ -3,4 +3,4 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-rootProject.name = 'template-spring-boot-docker-gradle'
+rootProject.name = "java-ca"
