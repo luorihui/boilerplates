@@ -19,20 +19,21 @@ plugins {
 
 apply(plugin = "io.spring.dependency-management")
 
+val baseName: String by project
+val version: String by project
+val mainClassName: String by project
+
 springBoot {
-    mainClassName = "com.sunray.templatespringbootdockergradle.TemplateSpringBootDockerGradleApplication"
+    mainClassName = mainClassName
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
 }
 
-group = "com.sunray"
-
-val myBaseName = "templatespringbootdockergradle"  
 tasks.getByName<BootJar>("bootJar") {
-    baseName = myBaseName
-    version =  "0.0.1-SNAPSHOT"
+    baseName = baseName
+    version =  version
 }
 
 tasks.create<Copy>("unpack") {
@@ -40,11 +41,30 @@ tasks.create<Copy>("unpack") {
     from(zipTree(tasks["bootJar"].outputs.files.singleFile))
     into("build/dependency")
 }
+
+tasks.create("customize") {
+    println("Customize this project to the following spec:\n");
+    println("Group:%s".format("${project.group}"))
+    println("Name:%s".format(baseName))
+    println("Version:%s".format(version))
+    println("MainClass:%s".format(mainClassName))
+    println("Root Project Name:%s".format(rootProject.name))
+    
+    println("Sanity check ...")
+    println("Back up ...")
+    println("Update gradle.properties ...")
+    println("Update .env ...")
+    println("Rename folders ...")
+    println("Alter Java files ...")
+    println("Sanity check ...")
+    println("Done!")
+}
+
 docker {
-    print(tasks.bootJar)
-    name = "${project.group}/${myBaseName}"
+    name = "%s/%s".format("${project.group}", baseName)
     copySpec.from(tasks["unpack"].outputs).into("dependency")
-    buildArgs(mapOf("DEPENDENCY" to "dependency"))
+    buildArgs(mapOf("DEPENDENCY" to "dependency", "MAINCLASS" to mainClassName))
+//    buildArgs(mapOf("DEPENDENCY" to "dependency"))
 }
 
 dependencies {
