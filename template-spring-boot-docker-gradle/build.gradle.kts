@@ -36,35 +36,43 @@ tasks.getByName<BootJar>("bootJar") {
     version =  version
 }
 
+tasks.create("customize") {
+    group = "Utils"
+    description = "Customize the project setting"
+
+    doLast{
+	    println("Customize this project to the following spec:\n");
+	    println("Group:%s".format("${project.group}"))
+	    println("Name:%s".format(baseName))
+	    println("Version:%s".format(version))
+	    println("MainClass:%s".format(mainClassName))
+	    println("Root Project Name:%s".format(rootProject.name))
+	    
+	    println("Sanity check ...")
+	    println("Back up ...")
+	    println("Update gradle.properties ...")
+	    println("Update .env ...")
+	    println("Rename folders ...")
+	    println("Alter Java files ...")
+	    println("Sanity check ...")
+	    println("Done!")
+    }
+}
+
 tasks.create<Copy>("unpack") {
+    println("unpack config")
     dependsOn(tasks.bootJar)
     from(zipTree(tasks["bootJar"].outputs.files.singleFile))
     into("build/dependency")
-}
-
-tasks.create("customize") {
-    println("Customize this project to the following spec:\n");
-    println("Group:%s".format("${project.group}"))
-    println("Name:%s".format(baseName))
-    println("Version:%s".format(version))
-    println("MainClass:%s".format(mainClassName))
-    println("Root Project Name:%s".format(rootProject.name))
-    
-    println("Sanity check ...")
-    println("Back up ...")
-    println("Update gradle.properties ...")
-    println("Update .env ...")
-    println("Rename folders ...")
-    println("Alter Java files ...")
-    println("Sanity check ...")
-    println("Done!")
+    doLast{
+        println("unpack doLast")
+    }        
 }
 
 docker {
     name = "%s/%s".format("${project.group}", baseName)
     copySpec.from(tasks["unpack"].outputs).into("dependency")
     buildArgs(mapOf("DEPENDENCY" to "dependency", "MAINCLASS" to mainClassName))
-//    buildArgs(mapOf("DEPENDENCY" to "dependency"))
 }
 
 dependencies {
