@@ -22,7 +22,7 @@ apply(plugin = "io.spring.dependency-management")
 val baseName: String by project
 val version: String by project
 val mainClassName: String by project
-
+val BackupFolder = "_backup"
 springBoot {
     mainClassName = mainClassName
 }
@@ -34,6 +34,36 @@ java {
 tasks.getByName<BootJar>("bootJar") {
     baseName = baseName
     version =  version
+}
+
+fun configCheck() {
+    println("Config check ...")
+}
+
+fun backup() {
+    println("Backing up ...")
+    val backupDir = File(BackupFolder)
+    backupDir.mkdirs()
+}
+
+fun updateProperties() {
+    println("Update gradle.properties ...")
+}
+
+fun updateEnv() {
+    println("Update .env")
+}
+
+fun renameFolders() {
+    println("Rename folders ...")
+}
+
+fun alterJavaFiles() {
+    println("Alter Java files ...")
+}
+
+fun sanityCheck() {
+    println("Sanity check ...")
 }
 
 tasks.create("customize") {
@@ -48,13 +78,18 @@ tasks.create("customize") {
 	    println("MainClass:%s".format(mainClassName))
 	    println("Root Project Name:%s".format(rootProject.name))
 	    
-	    println("Sanity check ...")
-	    println("Back up ...")
-	    println("Update gradle.properties ...")
-	    println("Update .env ...")
-	    println("Rename folders ...")
-	    println("Alter Java files ...")
-	    println("Sanity check ...")
+	    configCheck()
+	    backup()
+	    updateProperties()
+        
+	    updateEnv()
+        
+	    renameFolders()
+        
+        alterJavaFiles()
+        
+	    sanityCheck()
+        
 	    println("Done!")
     }
 }
