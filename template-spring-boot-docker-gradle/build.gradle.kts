@@ -1,5 +1,6 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 import java.util.Properties
+import java.io.*
 
 buildscript {
     dependencies {
@@ -91,7 +92,11 @@ fun alterJavaFiles(gradleProperties: Properties) {
             println("Processing %s".format(it))
             val oldContent = it.readText()
             if (oldContent.contains(oldPkg)) {
-                it.bufferedWriter().write(oldContent.replace(oldPkg, newPkg))
+                val newContent = oldContent.replace(oldPkg, newPkg)
+                val writer = it.bufferedWriter()
+                writer.write(newContent)
+                writer.close()
+
                 println("Replaced")
             } else {
                 println("No change")
