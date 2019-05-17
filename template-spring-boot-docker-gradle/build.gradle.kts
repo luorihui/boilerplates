@@ -176,6 +176,7 @@ fun renameSrcFolder(oldFolderPart: String, folderPart: String, parentFolder: Str
     val newFolder = "%s/%s".format(parentFolder, folderPart)
     println("Rename src folder, old %s, new %s".format(oldFolder, newFolder))
 
+    
     val oldFolderFile = File(oldFolder)
     if (oldFolderFile.exists()) {
         oldFolderFile.walkBottomUp().forEach {
