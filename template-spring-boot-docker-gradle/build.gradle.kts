@@ -176,10 +176,27 @@ fun renameSrcFolder(oldFolderPart: String, folderPart: String, parentFolder: Str
     val newFolder = "%s/%s".format(parentFolder, folderPart)
     println("Rename src folder, old %s, new %s".format(oldFolder, newFolder))
 
+
     val oldFolderFile = File(oldFolder)
     if (oldFolderFile.exists()) {
-        oldFolderFile.renameTo(File(newFolder))
-        println("Folder exists, moved")
+        oldFolderFile.walkBottomUp().forEach {
+            val newPath = it.absolutePath.replace(oldFolderPart, folderPart)
+            println("%s=>%s".format(it.absolutePath, newPath))
+
+            // Create directories if necessary
+            if (it.isDirectory) {
+                if (it.list().isEmpty()) {
+                    val deleted = it.delete()
+                    println("Empty directory, delete it, %s".format(deleted))
+                }
+                return@forEach
+            }
+            val newFile = File(newPath)
+
+            println("Create parent: %s".format(newFile.parentFile.mkdirs()))
+            val success = it.renameTo(newFile)
+            println("Moved: %s".format(success))
+        }
     } else {
         println("Folder do not exist")
     }
